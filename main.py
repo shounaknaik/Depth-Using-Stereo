@@ -11,6 +11,7 @@ from pose_disambiguation import ExtractCameraPose, DisambiguatePose
 from lineartriangulation import LinearTriangulation
 from rectification import stereo_rectification
 from lineUtils import drawlines
+from block_matching import ssd_correspondence
 
 def estimate_F_matrix(keypoints1,keypoints2):
     '''
@@ -94,8 +95,8 @@ def main():
     img1 = cv2.imread(f"./Data/Project3/Dataset {number}/im0.png", 0)
     img2 = cv2.imread(f"./Data/Project3/Dataset {number}/im1.png", 0)
 
-    width = int(img1.shape[1]* 0.3) # 0.3
-    height = int(img1.shape[0]* 0.3) # 0.3
+    width = int(img1.shape[1]* 0.3) # 0.4
+    height = int(img1.shape[0]* 0.3) # 0.4
 
     img1 = cv2.resize(img1, (width, height), interpolation = cv2.INTER_AREA)
     # cv2.imshow('img1',img1)
@@ -181,7 +182,26 @@ def main():
 
     #------------------------Correspondance --------------------------#
 
+    disparity_map_int= ssd_correspondence(rectified_img1, rectified_img2)
 
+
+    # ------------------------Depth-----------------------------------#
+
+    baseline1, f1 = 177.288, 5299.313
+    baseline2, f2 = 144.049, 4396.869
+    baseline3, f3 = 174.019, 5806.559
+    
+    params = [(baseline1, f1), (baseline2, f2), (baseline3, f3)]
+    baseline, f = params[number-1]
+
+    depth = (baseline * f) / (disparity_map_int + 1e-10)
+    depth[depth > 100000] = 100000
+
+    depth_map = np.uint8(depth * 255 / np.max(depth))
+    plt.imshow(depth_map, cmap='hot', interpolation='nearest')
+    plt.savefig('images/depth_hot.png')
+    plt.imshow(depth_map, cmap='gray', interpolation='nearest')
+    plt.savefig('./images/depth_gray.png')
 
 
 if __name__ == "__main__":
