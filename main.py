@@ -89,9 +89,9 @@ def get_draw_matches(img1,img2):
     return list_keypoints1, list_keypoints2
 
 def main():
-    # number = int(input("Please enter the dataset number (1/2/3) to use for calculating the depth map\n"))
+    number = int(input("Please enter the dataset number (1/2/3) to use for calculating the depth map\n"))
 
-    number = 1
+    # number = 1
     img1 = cv2.imread(f"./Data/Project3/Dataset {number}/im0.png", 0)
     img2 = cv2.imread(f"./Data/Project3/Dataset {number}/im1.png", 0)
 
