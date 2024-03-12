@@ -5,8 +5,10 @@ In this project, the concept of Stereo Vision is implemented. The Pipeline inclu
 ## Pipeline
 
 ### Calibration
-![Calibration](Data/Project3/Dataset 1/im0.png)
-![Calibration2](Data/Project3/Dataset 1/im1.png)
+The left and right images are shown below.
+
+![Calibration](Data/Project3/Dataset%201/im0.png)
+![Calibration2](Data/Project3/Dataset%201/im1.png)
 
 
 1) Feature Detection And Matching
