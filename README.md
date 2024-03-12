@@ -13,7 +13,7 @@ The left and right images are shown below.
 
 1) Feature Detection And Matching
 
-    a) The result is obtained using the Brute-Force matcher (SIFT) in OpenCV.  To filter these wrong feature pairs, we will use RANSAC in the next step.
+    a) The result is obtained using the Brute-Force matcher (SIFT) in OpenCV.  To filter the wrong feature pairs, we will use RANSAC in the next step.
 
     b) The matches are sorted based on hemming distance and 30 best matches are
     selected from the total matches for the RANSAC section.
@@ -23,7 +23,7 @@ The left and right images are shown below.
 
 2) Calculating Fundamental matric using **RANSAC**
 
-    The fundamental matrix is calculated using the 8-point algorithm. If the F matrix estimation is good, then terms features_2 * F * features_1 should be close to 0, where features_1 and features_2 are features from image1 and image2. Using this criterion, RANSAC can be used to filter the outliers.
+    The fundamental matrix is calculated using the 8-point algorithm. If the features_2*F*features_1 is less than a threshold, we can say that the Fundamental matrix is good. Using this criterion, RANSAC can be used to filter the outliers.
 
 3) Calculate the Essesntial Matrix
     Essential matrix is calculated using the Fundamental matrix and the intrinsic
@@ -38,7 +38,9 @@ The left and right images are shown below.
     for the chirelity condition.
 
 ### Rectification
-Using the fundamental matrix and the feature points, we can obtain the epipolar lines for both images. The epipolar lines need to be parallel for further computations to obtain depth. This can be done by reprojecting image planes onto a common plane parallel to the line between camera centers.
+Using the fundamental matrix and the feature points, we can obtain the epipolar lines for both images. The epipolar lines need to be parallel for further computations to obtain depth. This can be done by reprojecting image planes onto a common plane parallel to the line between camera centers.  
+
+The following images are the rectified left and rectified right.
 
 ![Rectification](images/left_image.png)
 ![Rectification2](images/right_image.png)
@@ -48,17 +50,16 @@ Using the fundamental matrix and the feature points, we can obtain the epipolar 
 For each pixel in the image we calculate disparity map using a sliding window and
 sum of squared differences approach and save the grayscale and heatmap images. 
 
-![Correspondance](images/disparity_image_gray.png)
+![Correspondance](images/disparity_image_heat.png)
 
 ### Depth Map
 If we know the focal length(f) and basline(b), the depth can be calculated.
 
     depth = (baseline*f)/disparity
 
-![Depth Map](images/depth_gray.png)
+![Depth Map](images/depth_hot.png)
 
 ## How to Run the Code
-    ```
 2) Run the following command:
   
     ```sh
